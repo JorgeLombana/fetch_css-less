@@ -16,7 +16,7 @@ const signUp = async (req, res) => {
   const newUser = new userModel({ username, email, password: hashedPassword })
   try {
     await newUser.save()
-    res.status(201).json({ msg: 'user created!' })
+    res.status(200).json({ msg: 'user created!' })
   } catch (error) {
     res.status(500).json(error)
   }
@@ -27,13 +27,13 @@ const singIn = async (req, res) => {
     const { email, password } = req.body
     const userExist = await userModel.findOne({ email: email })
     if (!userExist) {
-      return res.send(404).json({ msg: 'user not found' })
+      return res.status(404).json({ msg: 'user not found' })
     }
     const validPassword = bcryptjs.compareSync(password, userExist.password)
     if (!validPassword) {
       return res.status(401).json({ msg: 'wrong password' })
     }
-    res.status(201).json(userExist)
+    res.status(200).json(userExist)
   } catch (error) {
     res.status(500).json(error)
   }
